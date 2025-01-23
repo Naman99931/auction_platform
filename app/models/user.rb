@@ -9,4 +9,6 @@ class User < ApplicationRecord
   validates :phone_no, length: { is: 10 }
 
   enum :role, [ :bidder, :seller, :admin]
+
+  has_many :items
 end

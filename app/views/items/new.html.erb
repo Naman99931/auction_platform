@@ -1,0 +1,37 @@
+<h1>List a new Item </h1>
+<%= form_with model: @item do |form| %> 
+
+  <div>
+    <%= form.label :title, "Title" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :item_description, "Item Description" %>
+    <%= form.text_field :item_description %>
+  </div>
+
+  <div>
+    <%= form.label :reserved_price, "Enter your base price" %>
+    <%= form.text_field :reserved_price %>
+  </div>
+
+  <div>
+    <%= form.label :start_time, "Enter Date and Time at which the bidding will start" %>
+    <%= form.datetime_local_field :start_time %>
+  </div>
+
+  <div>
+    <%= form.label :end_time, "Enter Date and Time at which the bidding will close"%>
+    <%= form.datetime_local_field :end_time %>
+  </div>
+
+  <div>
+    <%= form.file_field :images %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Sign up" %>
+  </div>
+
+<% end %>

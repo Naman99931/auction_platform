@@ -1,0 +1,6 @@
+<h1> Item List </h1>
+<% @item.each do |item| %>
+  Item title : <%= item.title %><br>
+<% end %>
+
+<%= link_to "Add new items", new_item_path %>
