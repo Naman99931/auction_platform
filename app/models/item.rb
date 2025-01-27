@@ -4,7 +4,12 @@ class Item < ApplicationRecord
   validate :check_start_time, :check_end_time
 
   belongs_to :user
-  has_many_attached :images
+  has_one_attached :images do |attachable|
+    attachable.variant :thumb, resize_to_limit: [200, 200]
+  end
+
+  has_many :bids
+
 
   def check_start_time
     if start_time.present? && start_time < Date.today

@@ -1,0 +1,22 @@
+<h1> Ongoing Auctions </h1>
+
+<%= @items
+          .where("start_time < ? AND end_time > ?", Time.current, Time.current)
+          .each do |form| %>
+  
+ <h5> Title : <%= form.title %> </h5>
+
+  <%= image_tag form.images.variant(:thumb) %>
+  <br> 
+ Item Description : <%= form.item_description %>
+  <br>
+  Base Price : <%=form.reserved_price %>
+  <br>
+  Current Price : <%=form.current_price %>
+  <br>
+  Ends In : <%=form.end_time - Time.current %> seconds
+  <br>
+  <%= link_to "Participate", new_
+
+  
+<%  end %>

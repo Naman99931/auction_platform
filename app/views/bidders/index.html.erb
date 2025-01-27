@@ -1,0 +1,10 @@
+<h1> Bidders page</h1>
+<%= link_to "View Profile", home_user_profile_url %>
+<br>
+<h2> Listed items </h2>
+
+<%= render partial: "ongoing_auction", locals: { items: @items} %>
+
+<%= render partial: "upcoming_auction", locals: { items: @items} %>
+
+<%= render partial: "ended_auction", locals: { items: @items} %>

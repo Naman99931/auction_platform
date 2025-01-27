@@ -1,0 +1,18 @@
+<h1> Your Profile </h1>
+ <p> Name : <%=@user.firstname %> <%= @user.lastname %> </p>
+  <br>
+ <p> Email : <%= @user.email %> </p>
+  <br>
+ <p> Phone no, : <%= @user.phone_no %> </p>
+  <br>
+  <% if @user.gst_no %>
+   <p> GST no. : <%= @user.gst_no %> </p>
+    <br>
+ <%  end %>
+<p> PAN no. : <%= @user.pan_no %> </p>
+ <br>
+ <p>Address : <%= @user.address %> </p>
+ <br>
+
+ <%= link_to "Edit Profile", edit_user_registration_path %> 
+   

@@ -11,4 +11,5 @@ class User < ApplicationRecord
   enum :role, [ :bidder, :seller, :admin]
 
   has_many :items
+  has_many :bids
 end

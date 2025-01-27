@@ -12,8 +12,8 @@
   </div>
 
   <div>
-    <%= form.label :reserved_price, "Enter your base price" %>
-    <%= form.text_field :reserved_price %>
+    <%= form.label :reserved_price, "Enter base price for item" %>
+    <%= form.number_field :reserved_price %>
   </div>
 
   <div>
@@ -31,7 +31,7 @@
   </div>
 
   <div class="actions">
-    <%= form.submit "Sign up" %>
+    <%= form.submit "Create Item" %>
   </div>
 
 <% end %>

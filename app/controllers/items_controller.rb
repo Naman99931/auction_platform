@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
-  before_action :set_params, only: [:create]
+  #before_action :item_params, only: [:create]
   def index
-    @item = Item.all
+    @items = Item.all
   end
 
   def show
@@ -13,17 +13,33 @@ class ItemsController < ApplicationController
   end
 
   def create
-    item = Item.create(set_params)
-    if item.save
-      redirect_to show
+    #@item = Item.new(item_params, :current_user)
+    @item = current_user.items.new(item_params)
+    respond_to do |format|
+      if @item.save
+        format.html { redirect_to sellers_index_url(current_user), notice: "Item was created successfully." }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        puts @item.errors.full_messages
+      end
     end
-    # session[:item_id] = item.id
-    # redirect_to root_path
   end
 
+  # def ongoing_auction
+  #   @items = Item.where(:start_time < Time.now).where(:end_time > Time.now)
+  # end
+
+  # def upcoming_auction
+  #   @items = Item.where(:start_time > Time.now)
+  # end
+
+  # def ended_auction
+  #   @items = Item.where(:end_time < Time.now)
+  # end
+
   private
-  def set_params
-    params.expect(item: [:title, :item_description, :reserved_price, :start_time, :end_time, :images])
+  def item_params
+    params.expect(item: [:title, :user_id, :item_description, :reserved_price, :start_time, :end_time, :images])
   end
 
 end

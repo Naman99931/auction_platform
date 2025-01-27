@@ -1,0 +1,15 @@
+<h1> Sellers page</h1>
+<%= link_to "View Profile", home_user_profile_path %>
+<br>
+<%= link_to "Add new Item", new_item_path %>
+<br>
+<h2> Your Listed items </h2>
+
+<%= render partial: "ongoing_auction", locals: { seller_items: @seller_items} %>
+
+<%= render partial: "upcoming_auction", locals: { seller_items: @seller_items} %>
+
+<%= render partial: "ended_auction", locals: { seller_items: @seller_items} %>
+
+
+
