@@ -1,0 +1,22 @@
+<h3>Item Details</h3>
+<% @item = Item.joins(:bids).first %>
+  <h4>Title : <%= @item.title %> </h4>
+  <%= image_tag @item.images.variant(:thumb) %>
+  <br>
+  Item Description : <%= @item.item_description %>
+  <br>
+  Reserved Price : <%= @item.reserved_price %>
+  <br>
+  Started on : <%= @item.start_time %>
+  <br>    
+  Ends in : <%= @item.end_time - Time.current %>
+  <br>
+  <br>
+  <%= link_to "Place your Bid", new_item_bid_path(@item) %>
+<h4>All Bids</h4>
+<%= User.joins(:bids).order(amount: :desc).pluck("bids.amount, users.firstname, users.lastname").each do |form| %>
+ <h5>Amount : <%= form[0] %> </h5>
+ Bidder Name : <%= form[1] %><%= form[2]%>
+ <br>
+<%end %>
+

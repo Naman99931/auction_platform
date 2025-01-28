@@ -1,0 +1,11 @@
+<h4> Place a bid </h4>
+
+<%= form_with(model: [@item, @bid], local: true) do |form| %>
+
+<h6> Enter amount : <%= form.label :amount %> </h6> 
+                    <%= form.text_field :amount %>
+<p>*should be at least 5% more than the current price </p>
+<div class="actions">
+    <%= form.submit "Place Bid" %>
+</div>
+<%  end%>
