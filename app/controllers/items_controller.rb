@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   #before_action :item_params, only: [:create]
   def index
-    @items = Item.all
+    @items = current_user.items
   end
 
   def show

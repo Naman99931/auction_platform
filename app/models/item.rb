@@ -9,6 +9,7 @@ class Item < ApplicationRecord
   end
 
   has_many :bids
+  has_many :comments
 
 
   def check_start_time

@@ -1,5 +1,9 @@
 source "https://rubygems.org"
 
+# redis
+gem 'redis'
+gem 'sidekiq'
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
@@ -28,7 +32,8 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
 gem "solid_queue"
-gem "solid_cable"
+#gem "solid_cable"
+gem 'actioncable'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false

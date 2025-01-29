@@ -1,5 +1,4 @@
 <h3>Item Details</h3>
-<% @item = Item.joins(:bids).first %>
   <h4>Title : <%= @item.title %> </h4>
   <%= image_tag @item.images.variant(:thumb) %>
   <br>
@@ -13,10 +12,18 @@
   <br>
   <br>
   <%= link_to "Place your Bid", new_item_bid_path(@item) %>
+  <br>
+  <%= link_to "Comments", item_comments_path(@item) %>
+
+  
 <h4>All Bids</h4>
-<%= User.joins(:bids).order(amount: :desc).pluck("bids.amount, users.firstname, users.lastname").each do |form| %>
- <h5>Amount : <%= form[0] %> </h5>
- Bidder Name : <%= form[1] %><%= form[2]%>
- <br>
+<% @bids = @item.bids.order(amount: :desc) %>
+<%= @bids.each do |f| %>
+   <h5>Amount : <%= f.amount %> </h5>
+   Created at : <%= f.created_at %>
+   <br>
+   <% user = User.find(f.user_id) %>
+   Bidder name : <%= user.firstname %><%=user.lastname %>
+   <br>
 <%end %>
 
