@@ -1,7 +1,11 @@
 class ItemsController < ApplicationController
   #before_action :item_params, only: [:create]
   def index
-    @items = current_user.items
+    if current_user.role == "seller"
+      @items = current_user.items
+    else
+      @items = Item.all
+    end
   end
 
   def show
@@ -15,8 +19,10 @@ class ItemsController < ApplicationController
   def create
     #@item = Item.new(item_params, :current_user)
     @item = current_user.items.new(item_params)
+    @item.current_price = @item.reserved_price
     respond_to do |format|
       if @item.save
+        @item.current_price = @item.reserved_price
         format.html { redirect_to sellers_index_url(current_user), notice: "Item was created successfully." }
       else
         format.html { render :new, status: :unprocessable_entity }

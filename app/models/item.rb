@@ -8,8 +8,8 @@ class Item < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 
-  has_many :bids
-  has_many :comments
+  has_many :bids, dependent: :destroy
+  has_many :comments, dependent: :destroy
 
 
   def check_start_time

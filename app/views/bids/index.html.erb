@@ -11,10 +11,12 @@
   Ends in : <%= @item.end_time - Time.current %>
   <br>
   <br>
+  <% if current_user.role == "bidder" %>
   <%= link_to "Place your Bid", new_item_bid_path(@item) %>
+  <%end %>
   <br>
   <%= link_to "Comments", item_comments_path(@item) %>
-
+  <br>
   
 <h4>All Bids</h4>
 <% @bids = @item.bids.order(amount: :desc) %>
@@ -26,4 +28,6 @@
    Bidder name : <%= user.firstname %><%=user.lastname %>
    <br>
 <%end %>
+
+         
 

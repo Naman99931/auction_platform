@@ -3,6 +3,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
+  #after_action :after_sign_up_path_for, only: [:create]
 
   #GET /resource/sign_up
   def new
@@ -52,8 +53,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
-    UserMailer.with(user: current_user).welcome_email.deliver_later
-    super(resource)
+    # UserMailer.with(user: current_user).welcome_email.deliver_later
+    # if current_user.role == "seller"
+    #   current_user.notifications.create(note:"is to be approved.")
+    # end
+    items_path
   end
 
   # The path used after sign up for inactive accounts.

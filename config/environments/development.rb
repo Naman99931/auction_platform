@@ -42,6 +42,16 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
 
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "bestpeers.in", # Can use any other domain as well according to your convenience
+    user_name: "najain@bestpeers.in",
+    password: "duvm zchy bpar gdsd",
+    authentication: "plain",
+    enable_starttls_auto: true
+  }
+
   # Set localhost to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 

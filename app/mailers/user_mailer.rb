@@ -4,9 +4,17 @@ class UserMailer < ApplicationMailer
   #
   #   en.user_mailer.welcome_email.subject
   #
-  def welcome_email
-    @user = params[:user]
-    @url  = "http://example.com/login"
-    mail(to: @user.email, subject: "Welcome to My Awesome Site")
+  default from: 'najain@bestpeers.in'
+
+  def bid_placed(user)
+    @user = user
+    @url  = 'http://localhost:3000/login'
+    mail(to: @user.email, subject: "Your Bid is placed successfully")
+  end
+
+  def outbid(user)
+    @user = user
+    @url = 'http://localhost:3000/login'
+    mail(to: @user.email, subject: "Your bid is Outbided")
   end
 end
