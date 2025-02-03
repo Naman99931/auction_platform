@@ -3,11 +3,16 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
-  #after_action :after_sign_up_path_for, only: [:create]
 
   #GET /resource/sign_up
   def new
-    super
+    if params[:role].present?
+      build_resource({})
+      self.resource.role = params[:role] 
+      respond_with resource
+    else
+      super
+    end
   end
 
   #POST /resource
@@ -43,7 +48,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:attribute])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:role])
   end
 
   # If you have extra params to permit, append them to the sanitizer.
@@ -57,7 +62,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     # if current_user.role == "seller"
     #   current_user.notifications.create(note:"is to be approved.")
     # end
-    items_path
+    if params[:role] == "seller"
+      SellerRegisterNotifyJob.perform_now
+    end
+    
   end
 
   # The path used after sign up for inactive accounts.

@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">Auction Platform</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <% if user_signed_in? %>
+
+        <% if current_user.role == "admin" %>
+          <li class="nav-item">
+            <a class="nav-link" href="<%= admin_all_sellers_path %>">All Sellers</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="<%= admin_show_notifications_path %>">Notifications</a>
+          </li>
+        <% end %>
+
+        <% if current_user.role == "bidder" %>
+          <li class="nav-item">
+             <a class="nav-link" href="<%= bidders_buy_items_path %>">Your Items</a>
+          </li>
+        <% end %>
+          <li class="nav-item">
+            <a class="nav-link" href="<%= home_user_profile_path %>">Profile</a>
+          </li>
+
+          <li class="nav-item">
+          <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "nav-link" %>
+          </li>
+
+        <% else %>
+          <li class="nav-item">
+            <a class="nav-link" href="<%= new_user_registration_path %>">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<%= new_user_session_path %>">Login</a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

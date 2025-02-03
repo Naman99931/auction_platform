@@ -1,0 +1,7 @@
+<% @items.each do|f| %>
+<p><%= "You are the winner of the action of #{f.title}, on the price of #{f.current_price}, please do the payment from the given link"%></p>
+
+<% end %>
+<form action="/payments" method="POST">
+  <button type="submit">Pay with Stripe</button>
+</form>

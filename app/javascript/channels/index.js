@@ -1,2 +1,5 @@
 // Import all the channels to be used by Action Cable
-import "./comments_channel"
+
+
+// import "./cable";  // Ensure cable.js is imported
+// import "./comments_channel";

@@ -19,16 +19,22 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= link_to "View Profile", home_user_profile_path %>
+    <%= action_cable_meta_tag %>
+    
+
+    <%= action_cable_meta_tag %> <!-- Important for ActionCable -->
+
   </head>
 
   <body>
+   <%= render "layouts/header" %>
 
    <p class="notice"><%= notice %></p>
        <p class="alert"><%= alert %></p>
-       -
     <%= yield %>
   </body>
+
+  <%= render "layouts/footer" %>
 </html>

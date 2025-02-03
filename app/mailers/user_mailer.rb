@@ -17,4 +17,16 @@ class UserMailer < ApplicationMailer
     @url = 'http://localhost:3000/login'
     mail(to: @user.email, subject: "Your bid is Outbided")
   end
+
+  def payment_alert(user)
+    @user = user
+    @url = 'http://localhost:3000/login'
+    mail(to: @user.email, subject: "Congratulations, you win an auction")
+  end
+
+  def auction_end_alert(user)
+    @user = user
+    @url = 'http://localhost:3000/login'
+    mail(to: @user.email, subject: "Auction is about to end")
+  end
 end

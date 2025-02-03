@@ -2,89 +2,87 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= render "users/shared/error_messages", resource: resource %>
 
-<section class="vh-100 bg-image"
-  style="background-image: url('https://dinarys.com/storage/images/blogs/1BSuiff2cs0YpcWmC1UTDjjGe6MVDOxN4xwflAUV.jpeg');">
-  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-    <div class="container h-100">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-          <div class="card" style="border-radius: 15px;">
-            <div class="card-body p-5">
-              <h2 class="text-uppercase text-center mb-4">Create an account</h2>
+  <section class="min-vh-100 d-flex justify-content-center align-items-center"
+    style="background: url('https://dinarys.com/storage/images/blogs/1BSuiff2cs0YpcWmC1UTDjjGe6MVDOxN4xwflAUV.jpeg') center/cover no-repeat;">
+    
+    <div class="container d-flex justify-content-center align-items-center p-3">
+      <div class="card shadow-lg p-4" style="border-radius: 15px; max-width: 500px; width: 100%;">
+        <div class="card-body">
+          <h2 class="text-uppercase text-center mb-4">Create an account</h2>
 
-              <form>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                    <%= f.label :firstname, "Firstname" %>
-                    <%= f.text_field :firstname %>
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                    <%= f.label :lastname, "Lastname" %>
-                    <%= f.text_field :lastname %>
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                    <%= f.label :email %><br />
-                    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                    <%= f.label :phone_no, "Mobile No." %>
-                    <%= f.telephone_field :phone_no %> 
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                    <%= f.label :gst_no, "GST no.", placeholde: "mandatory for sellers" %>
-                    <%= f.text_field :gst_no %> 
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                   <%= f.label :pan_no, "PAN no." %>
-                   <%= f.text_field :pan_no %>
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                   <%= f.label :address, "Your Address" %>
-                   <%= f.text_field :address %>
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                    <%= f.radio_button :role, "bidder" %>
-                    <%= f.label :role, "Bidder" %>
-                    <%= f.radio_button :role, "seller" %>
-                    <%= f.label :role, "Seller" %>
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                  <%= f.label :password %>
-                  <% if @minimum_password_length %>
-                  <em>(<%= @minimum_password_length %> characters minimum)</em>
-                  <% end %><br />
-                  <%= f.password_field :password, autocomplete: "new-password" %>
-                </div>
-
-                <div data-mdb-input-init class="form-outline mb-2">
-                   <%= f.label :password_confirmation %><br />
-                   <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-                </div>
-
-                <div class="actions">
-                  <button  type="button" data-mdb-button-init
-                  data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"><%= f.submit "Register" %></button>
-              
-                </div>
-
-              </form>
-
-            </div>
+          <div class="form-outline mb-2">
+            <%= f.label :firstname, "Firstname" %>
+            <%= f.text_field :firstname, class: "form-control" %>
           </div>
+
+          <div class="form-outline mb-2">
+            <%= f.label :lastname, "Lastname" %>
+            <%= f.text_field :lastname, class: "form-control" %>
+          </div>
+
+          <div class="form-outline mb-2">
+            <%= f.label :email %><br />
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+          </div>
+
+          <div class="form-outline mb-2">
+            <%= f.label :phone_no, "Mobile No." %>
+            <%= f.telephone_field :phone_no, class: "form-control" %>
+          </div>
+
+          <div class="form-outline mb-2">
+            <%= f.label :gst_no, "GST No." %>
+            <%= f.text_field :gst_no, class: "form-control", placeholder: "Mandatory for sellers" %>
+          </div>
+
+          <div class="form-outline mb-2">
+            <%= f.label :pan_no, "PAN No." %>
+            <%= f.text_field :pan_no, class: "form-control" %>
+          </div>
+
+          <div class="form-outline mb-2">
+            <%= f.label :address, "Your Address" %>
+            <%= f.text_field :address, class: "form-control" %>
+          </div>
+
+          <% if resource.role == "admin" %>
+            <%= f.hidden_field :role, value: "admin" %>
+          <% else %>
+            <div class="form-outline mb-2">
+              <%= f.label :role %><br>
+              <%= f.radio_button :role, "bidder" %> Bidder
+              <%= f.radio_button :role, "seller" %> Seller
+            </div>
+          <% end %>
+
+          <div class="form-outline mb-2">
+            <%= f.label :password %>
+            <% if @minimum_password_length %>
+              <em>(<%= @minimum_password_length %> characters minimum)</em>
+            <% end %><br />
+            <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+          </div>
+
+          <div class="form-outline mb-2">
+            <%= f.label :password_confirmation %><br />
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+          </div>
+
+          <div class="actions text-center">
+            <%= f.submit "Register", class: "btn btn-success btn-lg btn-block" %>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- Buttons for Links -->
+          <div class="text-center">
+            <a href="/users/sign_in" class="btn btn-outline-primary btn-block">Already have an account? Sign in</a>
+            <a href="/users/password/new" class="btn btn-outline-secondary btn-block">Forgot your password?</a>
+          </div>
+
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
 <% end %>
-
-
-<%= render "users/shared/links" %>

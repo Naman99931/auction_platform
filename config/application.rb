@@ -38,5 +38,11 @@ module AuctionPlatform
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # action cable configuration 
+    config.action_cable.mount_path = '/cable'
+
+    config.assets.debug = false
+
   end
 end

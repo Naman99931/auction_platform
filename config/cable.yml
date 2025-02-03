@@ -1,17 +1,61 @@
 # Async adapter only works within the same process, so for manually triggering cable updates from a console,
 # and seeing results in the browser, you must do so from the web console (running inside the dev process),
 # not a terminal started via bin/rails console! Add "console" to any action or any ERB template view
-# to make the web console appear.
-development:
-  adapter: async
+# to make the web console appear.\
 
-test:
-  adapter: test
+
+# development:
+#   adapter: redis
+#   url: redis://localhost:6379/1
+
+# test:
+#   adapter: redis
+#   url: redis://localhost:6379/2
+
+
+# production:
+#   adapter: redis
+#   url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+#   channel_prefix: ac_explorer_production
+
+  
+# development:
+#   adapter: redis
+#   url: redis://localhost:6379/1
+#   channel_prefix: auction_platform
+
+# production:
+#   adapter: redis
+#   url: redis://localhost:6379/1
+#   channel_prefix: auction_platform
+#   redis:
+#     driver: ::Redis::Namespace
+#     namespace: auction_platform
+#   url: redis://localhost:6379/0
+#   pool_size: 5
+#   timeout: 5
+
+development:
+  adapter: redis
+  url: redis://localhost:6379/1
 
 production:
-  adapter: solid_cable
-  connects_to:
-    database:
-      writing: cable
-  polling_interval: 0.1.seconds
-  message_retention: 1.day
+  adapter: redis
+  url: redis://localhost:6379/1
+  channel_prefix: action_cable_demo_production
+
+
+
+# development:
+#   adapter: async
+
+# test:
+#   adapter: test
+
+# production:
+#   adapter: solid_cable
+#   connects_to:
+#     database:
+#       writing: cable
+#   polling_interval: 0.1.seconds
+#   message_retention: 1.day

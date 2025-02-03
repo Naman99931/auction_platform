@@ -1,23 +1,35 @@
 import consumer from "./consumer"
 
-document.addEventListener('turbolinks:load', () => {
-  const item_id = document.getElementById("item_id").value;
-
-consumer.subscriptions.create({channel: "CommentsChannel", item_id: item_id}, {
-
+const commentsChannel = consumer.subscriptions.create("CommentsChannel", {
   connected() {
-    console.log("Channel Connected!!  ");
-    // Called when the subscription is ready for use on the server
-  },
-
-  disconnected() {
-    // Called when the subscription has been terminated by the server
+    console.log("Connected to CommentsChannel");
   },
 
   received(data) {
-    document.getElementById("@comment").innerHTML += data.HTML
-    // Called when there's incoming data on the websocket for this channel
+    const commentsDiv = document.getElementById("comments");
+    commentsDiv.innerHTML += `<p><strong>${data.user}:</strong> ${data.content}</p>`;
   }
-
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("comment-form");
+  
+  if (form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      
+      const commentInput = document.getElementById("comment-input");
+      
+      fetch(`/items/${form.dataset.itemId}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
+        },
+        body: JSON.stringify({ comment: { content: commentInput.value } })
+      });
+
+      commentInput.value = "";
+    });
+  }
 });

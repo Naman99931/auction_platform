@@ -1,0 +1,23 @@
+<h3>Title : <%= @item.title %></h3>
+<%= image_tag @item.images.variant(:thumb) %>
+<br>
+<%= @item.item_description %>
+<br>
+<%= @item.reserved_price %>
+<br>
+<%= @item.start_time %>
+<br>
+<%= @item.end_time %>
+<br>
+
+<% if @item.winner_id.present? %>
+<% winner = User.find(winner_id) %>
+<h4> Winner name : <%= winner.firstname %> </h4>
+ <% bid = @item.bids.last %>
+<h4> Bought on : <%= bid.amount %>
+<% end %>
+
+<% if current_user.role == "seller" %>
+<%= link_to "Edit this item", edit_user_item_path(@item.id)%>
+<%= link_to "Delete this item", item_path(@item.id) %>
+<% end %>

@@ -14,20 +14,42 @@
   <% if current_user.role == "bidder" %>
   <%= link_to "Place your Bid", new_item_bid_path(@item) %>
   <%end %>
-  <br>
-  <%= link_to "Comments", item_comments_path(@item) %>
-  <br>
+
+  <h6>Comments : </h6>
+
+<div id="comments">
+  <% @item.comments.each do |comment| %>
+    <% user = User.find(comment.user_id) %>
+    <p><strong><%= user.firstname %>:</strong> <%= comment.content %></p>
+  <% end %>
+</div>
+
+<form id="comment-form" data-item-id="<%= @item.id %>">
+  <input type="text" id="comment-input" placeholder="Type a comment..." required>
+  <button type="submit">Send</button>
+</form>
+
+         
   
 <h4>All Bids</h4>
-<% @bids = @item.bids.order(amount: :desc) %>
-<%= @bids.each do |f| %>
-   <h5>Amount : <%= f.amount %> </h5>
-   Created at : <%= f.created_at %>
-   <br>
-   <% user = User.find(f.user_id) %>
-   Bidder name : <%= user.firstname %><%=user.lastname %>
-   <br>
+<% if current_user.role == "bidder" %>
+  <%= link_to "Place your Bid", new_item_bid_path(@item) %>
 <%end %>
+
+
+<% if @item.bids.present? %>
+    <% @bids = @item.bids.order(amount: :desc) %>
+    <% @bids.each do |f| %>
+      <h5>Amount : <%= f.amount %> </h5>
+      Created at : <%= f.created_at %>
+      <br>
+      <% user = User.find(f.user_id) %>
+      Bidder name : <%= user.firstname %><%=user.lastname %>
+      <br>
+    <%end %>
+<% else %>
+    <p>No bid yet...</p>
+<% end %>
 
          
 

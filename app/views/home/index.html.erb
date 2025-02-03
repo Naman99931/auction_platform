@@ -1,4 +1,3 @@
-
 <section class="vh-100 bg-image"
   style="background-image: url('https://dinarys.com/storage/images/blogs/1BSuiff2cs0YpcWmC1UTDjjGe6MVDOxN4xwflAUV.jpeg');">
   <div class="mask d-flex align-items-center h-100 gradient-custom-3">
@@ -17,10 +16,10 @@
 
                 <div data-mdb-input-init class="form-outline mb-4">
                   <h4><%= link_to "Dont have an account? Sign Up", new_user_registration_path %></h4>
-                </div>
+                  </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <h4><%= link_to "Sign Up as an admin", new_user_registration_path %></h4>
+                  <h4><%= link_to "Sign Up as an admin", new_user_registration_path(role: "admin") %></h4>
                 </div>
                 </div>
 
@@ -33,3 +32,4 @@
     </div>
   </div>
 </section>
+

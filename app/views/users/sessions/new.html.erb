@@ -1,51 +1,56 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+  <section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card shadow-2-strong" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
   
-<section class="vh-100" style="background-color: #508bfc;">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="card shadow-2-strong" style="border-radius: 1rem;">
-          <div class="card-body p-5 text-center">
-
-            <h3 class="mb-5">Sign in</h3>
-
-            <div data-mdb-input-init class="form-outline mb-4">
-              <%= f.label :email %><br />
-              <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+              <h3 class="mb-5">Sign in</h3>
+  
+              <div class="form-outline mb-4">
+                <%= f.label :email %><br />
+                <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+              </div>
+  
+              <div class="form-outline mb-4">
+                <%= f.label :password %><br />
+                <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+              </div>
+  
+              <% if devise_mapping.rememberable? %>
+              <div class="form-check d-flex justify-content-start mb-4">
+                <%= f.check_box :remember_me, class: "form-check-input" %>
+                <%= f.label :remember_me, class: "form-check-label" %>
+              </div>
+              <% end %>
+  
+              <div class="actions">
+                <%= f.submit "Log in", class: "btn btn-primary btn-lg btn-block" %>
+              </div>
+  
+              <hr class="my-4">
+  
+              <a href="#" class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;">
+                <i class="fab fa-google me-2"></i> Sign in with Google
+              </a>
+              <a href="#" class="btn btn-lg btn-block btn-primary mb-2" style="background-color: #3b5998;">
+                <i class="fab fa-facebook-f me-2"></i> Sign in with Facebook
+              </a>
+  
+              <br>
+              <!-- Additional Buttons -->
+              <a href="/users/sign_up" class="btn btn-outline-primary btn-block mt-3">Sign up</a>
+              <br>
+              <a href="/users/password/new" class="btn btn-outline-secondary btn-block">Forgot your password?</a>
+  
             </div>
-
-            <div data-mdb-input-init class="form-outline mb-4">
-              <%= f.label :password %><br />
-              <%= f.password_field :password, autocomplete: "current-password" %>
-            </div>
-
-            <% if devise_mapping.rememberable? %>
-            <!-- Checkbox -->
-            <div class="form-check d-flex justify-content-start mb-4">
-              <%= f.check_box :remember_me %>
-              <%= f.label :remember_me %>
-            </div>
-            <%end%>
-
-            <div class="actions">
-            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" type="submit"><%= f.submit "Log in" %></button>
-            </div>
-
-            <hr class="my-4">
-
-            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;"
-              type="submit"><i class="fab fa-google me-2"></i> Sign in with google</button>
-            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-lg btn-block btn-primary mb-2" style="background-color: #3b5998;"
-              type="submit"><i class="fab fa-facebook-f me-2"></i>Sign in with facebook</button>
-
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-</div>
-
-<%end%>
-
-<%= render "users/shared/links" %>
+  </section>
+  
+  <% end %>
+  

@@ -1,11 +1,32 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
-    sessions: 'users/sessions'
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
   }
 
+  #action cable :
+  
+  mount ActionCable.server => '/cable'
+
+  
   get 'sellers/index', to: 'sellers#index'
 
   get 'home/user_profile', to: 'home#user_profile'
+
+
+  get 'items/:id/set_alert', to: 'items#set_alert', as: 'set_alert'
+
+  get 'admin/all_sellers', to: 'admin#all_sellers'
+
+  
+  get 'admin/seller_items/:id', to: 'admin#seller_items', as: 'seller_items'
+  
+  get 'admin/show_notifications', to: 'admin#show_notifications'
+
+  post 'payments', to: 'payments#create'
+
+  get 'bidders/buy_items', to: 'bidders#buy_items'
+
 
   resources :bidders
 

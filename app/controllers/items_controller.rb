@@ -1,10 +1,12 @@
 class ItemsController < ApplicationController
   #before_action :item_params, only: [:create]
+  before_action :authenticate_user!
   def index
     if current_user.role == "seller"
-      @items = current_user.items
+      @items = current_user.items.includes(images_attachment: :blob)
+  
     else
-      @items = Item.all
+      @items = Item.all.includes(images_attachment: :blob)
     end
   end
 
@@ -19,11 +21,9 @@ class ItemsController < ApplicationController
   def create
     #@item = Item.new(item_params, :current_user)
     @item = current_user.items.new(item_params)
-    @item.current_price = @item.reserved_price
     respond_to do |format|
       if @item.save
-        @item.current_price = @item.reserved_price
-        format.html { redirect_to sellers_index_url(current_user), notice: "Item was created successfully." }
+        format.html { redirect_to items_url, notice: "Item was created successfully." }
       else
         format.html { render :new, status: :unprocessable_entity }
         puts @item.errors.full_messages
@@ -31,17 +31,34 @@ class ItemsController < ApplicationController
     end
   end
 
-  # def ongoing_auction
-  #   @items = Item.where(:start_time < Time.now).where(:end_time > Time.now)
-  # end
+  def edit
+    @item = Item.find(params[:id])
+  end
 
-  # def upcoming_auction
-  #   @items = Item.where(:start_time > Time.now)
-  # end
+  def destroy
+    @item = Item.find(params[:id])
+      if @item.destroy
+        flash[:notice] = "Item deleted successfully."
+      else
+        flash[:alert] = "Failed to delete item."
+      end
+    if current_user.role == "seller"
+      redirect_back fallback_location: items_path
+    elsif current_user.role == "admin"
+      redirect_back fallback_location: admin_all_sellers_path
+    end
+  end
+  
 
-  # def ended_auction
-  #   @items = Item.where(:end_time < Time.now)
-  # end
+  def set_alert
+    @item = Item.find(params[:id])
+    # Enqueue a job to be performed tomorrow at noon.
+    SendAlertJob.set(wait_until: @item.end_time - 1.hour).perform_later(current_user)
+    respond_to do |format|
+      format.html { redirect_back fallback_location: items_url, notice: "Will send an alert email 1 hour before ending the auction" }
+      format.js   # For AJAX (optional)
+    end
+  end
 
   private
   def item_params

@@ -20,6 +20,7 @@
             <p style="color: #424242; background-color: #E0E0E0; padding: 5px 10px; border-radius: 3px; display: inline-block; margin-bottom: 10px;"><%= form.item_description %></p>
             <p style="color: #616161; font-size: 14px; margin-bottom: 5px;">Started on: <%= form.start_time %></p>
             <p style="color: #616161; font-size: 14px;">Ends in: <strong><%= (form.end_time - Time.current).to_i %></strong> seconds</p>
+            
         </div>
 
         <!-- Price Section -->
@@ -30,12 +31,33 @@
             <h4 style="color: #00B8D4; margin-bottom: 0;"><%= form.current_price %></h4>
         </div>
 
-        <% if current_user.role == "bidder"%>
-        <%=link_to "Participate", item_bids_path(form.id) %>
-         <%else%>
-        <%= link_to "View Details", item_bids_path(form.id) %>
-         <%end%>
 
+        <br>
+        <%= link_to "View Details", item_path(form.id) %>
+        <br>
+        <%=link_to "View this Auction", item_bids_path(form.id) %>
+        <br>
+        <% if current_user.role == "bidder" %>
+            <% if (form.end_time - Time.current).to_i > 3600 %>
+                
+                <%= button_to "Set_alert", set_alert_path(form.id), method: :get, remote: true, class: "btn btn-primary" %>
+
+            <% end %>
+        <% end %>
+
+        <% if form.end_time <= Time.current %>
+             <% @item = Item.find(form.id) %>
+
+             <% if @item.bids.last.present? %>
+                <% winner_bid = @item.bids.last %>
+                <% winner_bid.final_bid = true  %>
+                <% winner = User.find(winner_bid.user_id) %>
+                <% @item.winner_id = winner.id %>
+                <% UserMailer.payment_alert(winner).deliver_now %>
+                WinnerNotifyJob.perform_now(winner, @item)
+             <% end %>
+        <% end %>
+             
     </div>
    
 <% end %>
