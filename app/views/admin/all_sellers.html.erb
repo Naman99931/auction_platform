@@ -1,4 +1,4 @@
 <h4> All Sellers </h4>
 <% @sellers.each do |f| %>
-<h6> Name : <%=f.firstname%> <%= f.lastname %>           <%= link_to "All items", seller_items_path(f.id)%></h6>  
+<h6> Name : <%=f.firstname%> <%= f.lastname %>        <%= link_to "All items", user_items_path(f.id)%></h6>
 <% end %>

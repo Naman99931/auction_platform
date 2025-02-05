@@ -32,26 +32,13 @@
 
 
         <br>
-        <%= link_to "View Details", item_path(form.id) %>
+        <%= button_to "View Details", item_path(form.id), method: :get, class: "btn btn-info" %>
+
         <br>
-        <%=link_to "View this Auction", item_bids_path(form.id) %>
+        <%= button_to "View this Auction", item_bids_path(form.id), method: :get, class: "btn btn-secondary" %>
         <br>
         <br>
         <%= button_to "Delete", item_path(form.id), method: :delete, remote: true, class: "btn btn-danger" %>
-        
-
-        <% if form.end_time == Time.current %>
-             <% @item = Item.find(form.id) %>
-
-             <% if @item.bids.last.present? %>
-                <% winner_bid = @item.bids.last %>
-                <% winner_bid.final_bid = true  %>
-                <% winner = User.find(winner_bid.user_id) %>
-                <% @item.winner_id = winner.id %>
-                <% UserMailer.payment_alert(winner).deliver_now %>
-                WinnerNotifyJob.perform_now(winner, @item)
-             <% end %>
-        <% end %>
              
     </div>
    

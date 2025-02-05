@@ -21,18 +21,17 @@ class BidsController < ApplicationController
         end
         @bid = @item.bids.new(bid_params)
         @bid.user = current_user
-
         respond_to do |format|
           if @bid.amount >= expect_amount(@item.current_price)
-            @item.current_price = @bid.amount
+            #@item.current_price = @bid.amount
             
               if @bid.save
                 @item.update_column(:current_price, @bid.amount)
 
                 if last_user.present?
-                  UserMailer.outbid(last_user).deliver_now
+                  UserMailer.outbid(last_user).deliver_later
                 end
-                UserMailer.bid_placed(current_user).deliver_now
+                UserMailer.bid_placed(current_user).deliver_later
                 format.html { redirect_to item_bids_path(@item), notice: "Bid created successfully." }
               else
                 format.html { render :new, status: :unprocessable_entity }
@@ -42,11 +41,6 @@ class BidsController < ApplicationController
             format.html { redirect_to new_item_bid_path(@item), notice: "Please place a higher amount." }
           end
         end
-      else
-        winner_bid = @item.bids.last
-        winner_bid.final_bid = true
-        winner = User.find(winner_bid.user_id)
-        UserMailer.payment_alert(winner).deliver_now
       end
   end
 

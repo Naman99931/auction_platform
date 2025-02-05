@@ -34,7 +34,7 @@
 
 
         <br>
-        <%= link_to "View Details", item_path(form.id) %>
+         <%= button_to "View Details", item_path(form.id), method: :get, class: "btn btn-info" %>
         <br>
         <% @item = Item.find(form.id) %>
         <% if @item.winner_id.present? %>

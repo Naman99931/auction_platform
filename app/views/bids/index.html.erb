@@ -8,7 +8,7 @@
   <br>
   Started on : <%= @item.start_time %>
   <br>    
-  Ends in : <%= @item.end_time - Time.current %>
+  Ends in : <%= (@item.end_time - Time.current).to_i %> seconds
   <br>
   <br>
   <% if current_user.role == "bidder" %>
@@ -16,20 +16,25 @@
   <%end %>
 
   <h6>Comments : </h6>
+  <%= link_to "Add Your Comment", new_item_comment_path(@item) %>
+  <% if @item.comments.present? %>
+    <% @item.comments.each do |comment| %>
+        <% user = User.find(comment.user_id) %>
+        <p>Name : <%=user.firstname%><%=user.lastname%></p>
+        <p><%= comment.content %> </p> 
+        <% if current_user.role == "seller" || current_user.role == "admin" %>
 
-<div id="comments">
-  <% @item.comments.each do |comment| %>
-    <% user = User.find(comment.user_id) %>
-    <p><strong><%= user.firstname %>:</strong> <%= comment.content %></p>
+          <%= button_to "Delete", item_comment_path(@item, comment.id), method: :delete, remote: true, class: "btn btn-danger" %>
+
+        <% end %>
+        <br>
+    <%end%>
+      
+  <% else %>
+      <p>No comments yet...</p>
   <% end %>
-</div>
-
-<form id="comment-form" data-item-id="<%= @item.id %>">
-  <input type="text" id="comment-input" placeholder="Type a comment..." required>
-  <button type="submit">Send</button>
-</form>
-
-         
+  
+        
   
 <h4>All Bids</h4>
 <% if current_user.role == "bidder" %>

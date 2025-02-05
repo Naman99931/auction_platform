@@ -17,13 +17,10 @@ class CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
-      ActionCable.server.broadcast("comments_channel", {
-        user: @comment.user.firstname,
-        content: @comment.content
-      })
-      head :ok
+      redirect_to item_bids_path(@item.id)
     else
-      render json: { error: "Comment not saved" }, status: :unprocessable_entity
+      flash[:alert] = "Add a Valid Comment"
+      redirect_back fallback_location: item_bids_path(@item.id)
     end
   end
 

@@ -1,6 +1,6 @@
 <h1 style="font-size: 28px; color: #212121; margin-bottom: 20px;">Ongoing Auctions</h1>
 
-<% @items.where("start_time < ? AND end_time > ?", Time.current, Time.current).each do |form| %>
+<% @items.where("start_time < ? AND end_time >= ?", Time.current, Time.current).each do |form| %>
     <div style="padding: 20px; width: 950px; margin: 20px auto; border-radius: 10px; box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); background-color: #fff; display: flex; align-items: center;">
         
         <!-- Image Section -->
@@ -32,10 +32,12 @@
         </div>
 
 
+        
         <br>
-        <%= link_to "View Details", item_path(form.id) %>
+                <%= button_to "View Details", item_path(form.id), method: :get, class: "btn btn-info" %>
         <br>
-        <%=link_to "View this Auction", item_bids_path(form.id) %>
+        <%= button_to "View this Auction", item_bids_path(form.id), method: :get, class: "btn btn-secondary" %>
+
         <br>
         <% if current_user.role == "bidder" %>
             <% if (form.end_time - Time.current).to_i > 3600 %>
@@ -45,16 +47,20 @@
             <% end %>
         <% end %>
 
+        <% if current_user.role == "seller" %>
+            <%= button_to "End Auction", end_auction_path(form.id), method: :get, remote: true, class: "btn btn-danger" %>
+        <% end %>   
+
         <% if form.end_time <= Time.current %>
              <% @item = Item.find(form.id) %>
 
              <% if @item.bids.last.present? %>
                 <% winner_bid = @item.bids.last %>
-                <% winner_bid.final_bid = true  %>
+                <% winner_bid.update_column(:final_bid, true) %>
                 <% winner = User.find(winner_bid.user_id) %>
                 <% @item.winner_id = winner.id %>
                 <% UserMailer.payment_alert(winner).deliver_now %>
-                WinnerNotifyJob.perform_now(winner, @item)
+                <% WinnerNotifyJob.perform_now(winner, @item) %>
              <% end %>
         <% end %>
              

@@ -16,19 +16,27 @@ Rails.application.routes.draw do
 
   get 'items/:id/set_alert', to: 'items#set_alert', as: 'set_alert'
 
+  get 'items/:id/end_auction', to: 'items#end_auction', as: 'end_auction'
+
   get 'admin/all_sellers', to: 'admin#all_sellers'
 
-  
-  get 'admin/seller_items/:id', to: 'admin#seller_items', as: 'seller_items'
+  get 'admin/all_bidders', to: 'admin#all_bidders'
+
+  get 'admin/user_items/:id', to: 'admin#user_items', as: 'user_items'
+
   
   get 'admin/show_notifications', to: 'admin#show_notifications'
 
-  post 'payments', to: 'payments#create'
+  get 'success', to: 'payments#success'
+  get 'cancel', to: 'payments#cancel'
 
   get 'bidders/buy_items', to: 'bidders#buy_items'
 
+  get 'admin/approve_seller/:id/:user_id', to: 'admin#approve_seller', as: 'admin_approve_seller'
+  
+  post "payments/create", to: "payments#create"
 
-  resources :bidders
+  resources :bidders, only: [:index]
 
   resources :items
 

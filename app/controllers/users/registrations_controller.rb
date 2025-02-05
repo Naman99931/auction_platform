@@ -58,14 +58,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
-    # UserMailer.with(user: current_user).welcome_email.deliver_later
-    # if current_user.role == "seller"
-    #   current_user.notifications.create(note:"is to be approved.")
-    # end
-    if params[:role] == "seller"
-      SellerRegisterNotifyJob.perform_now
-    end
-    
+    if resource.role == "seller"
+      SellerRegisterNotifyJob.perform_now(resource)
+      items_path
+    else
+      root_path 
+    end  
   end
 
   # The path used after sign up for inactive accounts.

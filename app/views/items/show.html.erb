@@ -1,14 +1,19 @@
 <h3>Title : <%= @item.title %></h3>
 <%= image_tag @item.images.variant(:thumb) %>
 <br>
-<%= @item.item_description %>
+Description : <%= @item.item_description %>
 <br>
-<%= @item.reserved_price %>
+Reserved Price : <%= @item.reserved_price %>
 <br>
-<%= @item.start_time %>
+<% if @current_price.present? %>
+    Current Price : <%= @item.current_price %>
 <br>
-<%= @item.end_time %>
+<% end %>
+Start Time : <%= @item.start_time %>
 <br>
+End Time : <%= @item.end_time %>
+<br>
+
 
 <% if @item.winner_id.present? %>
 <% winner = User.find(winner_id) %>
@@ -21,3 +26,7 @@
 <%= link_to "Edit this item", edit_user_item_path(@item.id)%>
 <%= link_to "Delete this item", item_path(@item.id) %>
 <% end %>
+
+<% if current_user.role == "admin" %>
+  <%= button_to "Delete", item_path(@item.id), method: :delete, class: "btn btn-danger" %>
+<% end %> 

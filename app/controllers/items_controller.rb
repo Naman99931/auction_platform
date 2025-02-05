@@ -4,7 +4,8 @@ class ItemsController < ApplicationController
   def index
     if current_user.role == "seller"
       @items = current_user.items.includes(images_attachment: :blob)
-  
+    
+
     else
       @items = Item.all.includes(images_attachment: :blob)
     end
@@ -21,8 +22,10 @@ class ItemsController < ApplicationController
   def create
     #@item = Item.new(item_params, :current_user)
     @item = current_user.items.new(item_params)
+    @item.current_price = @item.reserved_price
     respond_to do |format|
       if @item.save
+        AuctionWinnerJob.set(wait_until: @item.end_time).perform_later(@item)
         format.html { redirect_to items_url, notice: "Item was created successfully." }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -33,6 +36,17 @@ class ItemsController < ApplicationController
 
   def edit
     @item = Item.find(params[:id])
+  end
+
+  def update
+    @item = Item.find(params[:id])
+  
+    if @item.update(item_params)
+      redirect_to @item, notice: "Item was successfully updated."
+    else
+      flash[:alert] = "Failed to update item."
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -52,12 +66,23 @@ class ItemsController < ApplicationController
 
   def set_alert
     @item = Item.find(params[:id])
-    # Enqueue a job to be performed tomorrow at noon.
+
     SendAlertJob.set(wait_until: @item.end_time - 1.hour).perform_later(current_user)
+    
     respond_to do |format|
       format.html { redirect_back fallback_location: items_url, notice: "Will send an alert email 1 hour before ending the auction" }
-      format.js   # For AJAX (optional)
     end
+  end
+
+  def end_auction
+    @item = Item.find(params[:id])
+    @item.update_column(:end_time, Time.current)
+    if @item.save
+      AuctionWinnerJob.perform_later(@item)
+      respond_to do |format|
+        format.html { redirect_back fallback_location: items_url, notice: "Forcefully ended the auction" }
+      end
+     end
   end
 
   private

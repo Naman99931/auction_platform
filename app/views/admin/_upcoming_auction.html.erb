@@ -32,7 +32,7 @@
         </div>
 
         <br>
-        <%= link_to "View Details", item_path(form.id) %>
+         <%= button_to "View Details", item_path(form.id), method: :get, class: "btn btn-info" %>
         <br>
         <%= button_to "Delete", item_path(form.id), method: :delete, remote: true, class: "btn btn-danger" %>
     </div> 
