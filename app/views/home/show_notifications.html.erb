@@ -1,0 +1,38 @@
+<h3>Notifications</h3>
+<% @notifications.each do |f| %>
+   <% if f.user_role == "admin" %>
+     <% if current_user_role == "admin" %>
+      <%= f.user.firstname %> :
+      <%= f.note%>
+
+      <% if f.item_id.present? %>
+         <% item = Item.find(f.item_id) %>
+      <% end %>
+
+      <% if f.user.approved == false %>
+            <%= button_to "approve", home_approve_user_path(f.id, f.user_id), method: :get, class: "btn btn-primary" %>
+            <%= button_to "View User Datails", view_profile_path(f.user_id), method: :get, class: "btn btn-primary" %>
+
+      <% elsif f.item_id.present? && item.approved==false %>
+            <%= button_to "approve item", home_approve_item_path(f.id, f.item_id), method: :get, class: "btn btn-primary" %> 
+            <%= button_to "View Item Details", item_path(f.item_id), method: :get, class: "btn btn-info" %>
+            <%= button_to "View User Datails", view_profile_path(f.user_id), method: :get, class: "btn btn-primary" %>
+         
+      <% elsif (f.item_id).present?%>
+            <%= button_to "Flag this item", flag_item_path(f.id, f.item_id), method: :get, class: "btn btn-danger" %>
+      
+      <% else %>
+         <%= button_to "Flag this user", flag_user_path(f.id, f.user_id), method: :get, class: "btn btn-danger" %>
+      <% end %>
+     <% end %>
+
+   <% else %>
+      <% if f.user_id == current_user.id %>
+         <%= f.note %>
+         <br>
+      <% end %>
+   <% end %>
+
+<% end %>
+
+  

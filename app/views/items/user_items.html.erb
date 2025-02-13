@@ -1,0 +1,17 @@
+<% if current_user_role == "seller" %>
+  <% if current_user.approved == true && current_user.flagged == false%>
+      <br>
+      <%= button_to "Add new Item", new_item_path, method: :get, class: "btn btn-primary" %>
+      <br>
+  <% else %>
+      <p>Your account is yet to be approved.</p>
+  <% end %>
+<% end %>
+
+
+
+<%=  render partial: "ongoing_auction", locals: { items: @items} %>
+
+<%= render partial: "upcoming_auction", locals: { items: @items} %>
+
+<%= render partial: "ended_auction", locals: { items: @items} %>

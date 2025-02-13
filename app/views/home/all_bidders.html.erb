@@ -1,0 +1,6 @@
+<h4> All Sellers </h4>
+<% @bidders.each do |f| %>
+<h6> Name : <%=f.firstname%> <%= f.lastname %> 
+       <%= link_to "Bought Items", user_items_path(f.id)%> 
+         <%= link_to "View Profile", view_profile_path(f.id)%></h6>  
+<% end %>

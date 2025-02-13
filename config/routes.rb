@@ -1,42 +1,58 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: 'users/sessions',
-    registrations: 'users/registrations'
+    registrations: 'users/registrations',
+    omniauth_callbacks: 'users/omniauth_callbacks'
   }
+  get 'approve_request', to: 'home#approve_request'
+
+  patch 'add_details', to: 'home#add_details'
+
+  get 'report_item/:id', to: 'items#report_item', as: 'report_item'
+
+  get 'flag_item/:id/:item_id', to: 'home#flag_item', as: 'flag_item'
+
+  get 'report_user/:id', to: 'home#report_user', as: 'report_user'
+
+  get 'flag_user/:id/:user_id', to: 'home#flag_user', as: 'flag_user'
+  
 
   #action cable :
-  
   mount ActionCable.server => '/cable'
 
-  
-  get 'sellers/index', to: 'sellers#index'
+  # get 'comment_reply', to: 'comments#comment_reply'
 
   get 'home/user_profile', to: 'home#user_profile'
+
+  # post 'reply', to: 'comments#save_reply'
 
 
   get 'items/:id/set_alert', to: 'items#set_alert', as: 'set_alert'
 
   get 'items/:id/end_auction', to: 'items#end_auction', as: 'end_auction'
 
-  get 'admin/all_sellers', to: 'admin#all_sellers'
+  get 'user_items/:id', to: 'items#user_items', as: 'user_items'
 
-  get 'admin/all_bidders', to: 'admin#all_bidders'
+  get 'home/all_sellers', to: 'home#all_sellers'
 
-  get 'admin/user_items/:id', to: 'admin#user_items', as: 'user_items'
+  get 'home/all_bidders', to: 'home#all_bidders'
 
-  
-  get 'admin/show_notifications', to: 'admin#show_notifications'
+  get 'view_profile/:id', to: 'home#view_profile', as: 'view_profile'
+
+  get 'home/show_notifications', to: 'home#show_notifications'
 
   get 'success', to: 'payments#success'
   get 'cancel', to: 'payments#cancel'
 
-  get 'bidders/buy_items', to: 'bidders#buy_items'
+  get 'items/buy_items', to: 'items#buy_items'
 
-  get 'admin/approve_seller/:id/:user_id', to: 'admin#approve_seller', as: 'admin_approve_seller'
+  get 'home/approve_user/:id/:user_id', to: 'home#approve_user', as: 'home_approve_user'
+
+  get 'home/approve_item/:id/:item_id', to: 'home#approve_item', as: 'home_approve_item'
   
   post "payments/create", to: "payments#create"
 
-  resources :bidders, only: [:index]
+  get 'flag_comment/:id', to: 'comments#flag_comment', as: 'flag_comment'
 
   resources :items
 

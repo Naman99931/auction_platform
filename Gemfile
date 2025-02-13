@@ -32,7 +32,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
 gem "solid_cache"
 gem "solid_queue"
-#gem "solid_cable"
+gem "solid_cable"
 gem 'actioncable'
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -75,3 +75,14 @@ gem 'sinatra'
 gem "devise", "~> 4.9"
 
 gem "stripe", "~> 13.4"
+
+# authorization : 
+gem 'cancancan'
+
+gem 'omniauth-google-oauth2'
+
+gem "omniauth-rails_csrf_protection"
+
+gem "sqlite3", "~> 2.5"
+
+gem "importmap-rails", "~> 2.1"

@@ -10,23 +10,30 @@
       <ul class="navbar-nav ms-auto">
         <% if user_signed_in? %>
 
-        <% if current_user.role == "admin" %>
+        <% if current_user_role == "admin" %>
           <li class="nav-item">
-            <a class="nav-link" href="<%= admin_all_sellers_path %>">All Sellers</a>
+            <a class="nav-link" href="<%= home_all_sellers_path %>">All Sellers</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="<%= admin_all_bidders_path %>">All Bidders</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="<%= admin_show_notifications_path %>">Notifications</a>
+            <a class="nav-link" href="<%= home_all_bidders_path %>">All Bidders</a>
           </li>
         <% end %>
-
-        <% if current_user.role == "bidder" %>
+        
           <li class="nav-item">
-             <a class="nav-link" href="<%= bidders_buy_items_path %>">Your Items</a>
+            <a class="nav-link" href="<%= home_show_notifications_path %>">Notifications</a>
+          </li>
+        
+
+        <% if current_user_role == "seller" %>
+            <li class="nav-item">
+              <a class="nav-link" href="<%= user_items_path(current_user.id) %>">My Items</a>
+            </li>
+        <% end %>  
+
+        <% if current_user_role == "bidder" %>
+          <li class="nav-item">
+             <a class="nav-link" href="<%= items_buy_items_path %>">Your Items</a>
           </li>
         <% end %>
           <li class="nav-item">

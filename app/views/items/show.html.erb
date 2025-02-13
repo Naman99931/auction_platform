@@ -1,32 +1,41 @@
-<h3>Title : <%= @item.title %></h3>
-<%= image_tag @item.images.variant(:thumb) %>
-<br>
-Description : <%= @item.item_description %>
-<br>
-Reserved Price : <%= @item.reserved_price %>
-<br>
-<% if @current_price.present? %>
-    Current Price : <%= @item.current_price %>
-<br>
-<% end %>
-Start Time : <%= @item.start_time %>
-<br>
-End Time : <%= @item.end_time %>
-<br>
 
+<div class="card shadow-sm p-3 mb-4">
+  <h3 class="text-primary">Title: <%= @item.title %></h3>
+  
+  <div class="text-center my-3">
+    <%= image_tag @item.images.variant(:thumb), class: "img-fluid rounded" %>
+  </div>
+  <%seller = return_seller(@item.id)%>
+  <h4><strong>Seller Name: <%=seller.firstname%> <%=seller.lastname%></strong></h4>
+  <%= link_to "View Profile", view_profile_path(seller.id)%></h6> 
+  <br>
+  <p><strong>Description:</strong> <%= @item.item_description %></p>
+  <p><strong>Reserved Price:</strong> ₹<%= @item.reserved_price %></p>
 
-<% if @item.winner_id.present? %>
-<% winner = User.find(winner_id) %>
-<h4> Winner name : <%= winner.firstname %> </h4>
- <% bid = @item.bids.last %>
-<h4> Bought on : <%= bid.amount %>
-<% end %>
+  <% if @item.current_price.present? %>
+    <p><strong>Current Price:</strong> ₹<%= @item.current_price %></p>
+  <% end %>
 
-<% if current_user.role == "seller" %>
-<%= link_to "Edit this item", edit_user_item_path(@item.id)%>
-<%= link_to "Delete this item", item_path(@item.id) %>
-<% end %>
+  <p><strong>Start Time:</strong> <%= @item.start_time.strftime("%d %b %Y, %I:%M %p") %></p>
+  <p><strong>End Time:</strong> <%= @item.end_time.strftime("%d %b %Y, %I:%M %p") %></p>
 
-<% if current_user.role == "admin" %>
-  <%= button_to "Delete", item_path(@item.id), method: :delete, class: "btn btn-danger" %>
-<% end %> 
+  <% winner = return_winner(@item) %>
+  <% if winner.present? %>
+    <div class="alert alert-success">
+      <h4>Winner: <%= winner.firstname %></h4>
+      <% bid = @item.bids.last %>
+      <h4>Bought for: ₹<%= bid.amount %></h4>
+    </div>
+  <% end %>
+
+  <div class="mt-3">
+    <% if current_user_role == "seller" && current_user.id == @item.user_id %>
+      <%= link_to "Edit", edit_user_item_path(@item.id), class: "btn btn-primary me-2" %>
+      <%= link_to "Delete", item_path(@item.id), method: :delete, remote: true, class: "btn btn-danger" %>
+    <% end %>
+
+    <% if current_user_role == "admin" %>
+      <%= button_to "Delete", item_path(@item.id), method: :delete, class: "btn btn-danger" %>
+    <% end %>
+  </div>
+</div>

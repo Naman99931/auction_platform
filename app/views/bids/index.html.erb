@@ -1,60 +1,80 @@
-<h3>Item Details</h3>
-  <h4>Title : <%= @item.title %> </h4>
-  <%= image_tag @item.images.variant(:thumb) %>
-  <br>
-  Item Description : <%= @item.item_description %>
-  <br>
-  Reserved Price : <%= @item.reserved_price %>
-  <br>
-  Started on : <%= @item.start_time %>
-  <br>    
-  Ends in : <%= (@item.end_time - Time.current).to_i %> seconds
-  <br>
-  <br>
-  <% if current_user.role == "bidder" %>
-  <%= link_to "Place your Bid", new_item_bid_path(@item) %>
-  <%end %>
+<div class="container mt-4">
+  <div class="card p-4">
+    <h3 class="mb-3">Item Details</h3>
+    <h4>Title: <%= @item.title %></h4>
+    <div class="text-center mb-3">
+      <%= image_tag @item.images.variant(:thumb), class: "img-fluid rounded" %>
+    </div>
+    <p><strong>Item Description:</strong> <%= @item.item_description %></p>
+    <p><strong>Reserved Price:</strong> <%= @item.reserved_price %></p>
+    <p><strong>Current Price:</strong> <%= @item.current_price %><p>
+    <p><strong>Started on:</strong> <%= @item.start_time %></p>
+    <p><strong>Ends in:</strong> <%= (@item.end_time - Time.current).to_i %> seconds</p>
+    
+  <% if current_user.id == @item.user_id || check_admin%>
+    <%= button_to "End Auction", end_auction_path(@item.id), method: :get, remote: true, class: "btn btn-danger" %>
+  <% end %> 
 
-  <h6>Comments : </h6>
-  <%= link_to "Add Your Comment", new_item_comment_path(@item) %>
-  <% if @item.comments.present? %>
-    <% @item.comments.each do |comment| %>
-        <% user = User.find(comment.user_id) %>
-        <p>Name : <%=user.firstname%><%=user.lastname%></p>
-        <p><%= comment.content %> </p> 
-        <% if current_user.role == "seller" || current_user.role == "admin" %>
+    <h4 class="mt-4">All Bids:</h4>
+    <% if current_user_role == "bidder" && current_user.approved == true && current_user.flagged == false%>
+      <%= link_to "Place your Bid", new_item_bid_path(@item), class: "btn btn-primary" %>
+    <% end %>
+  </div>
 
-          <%= button_to "Delete", item_comment_path(@item, comment.id), method: :delete, remote: true, class: "btn btn-danger" %>
+  <div class="card mt-4 p-4">
+    <h6>Comments:</h6>
+    <% if current_user_role == "bidder" || current_user.id == @item.user_id %>
+      <%= form_with model: [@item, Comment.new], remote: true, html: { class: "mb-3" } do |f| %>
+        <div class="mb-2">
+          <%= f.text_area :content, placeholder: "Add a comment...", class: "form-control" %>
+        </div>
+        <%= f.submit "Post", class: "btn btn-success" %>
+      <% end %>
+    <% end %>
 
-        <% end %>
-        <br>
-    <%end%>
-      
-  <% else %>
+    <% if @item.comments.present? %>
+      <div id="comments" data-item-id="<%= @item.id %>">
+        <div id="comments-list">
+          <% @item.comments.each do |comment| %>
+            <% if comment.flagged == false %>
+            <% user = User.find(comment.user_id) %>
+            <div class="border p-2 rounded mb-2">
+              <p><strong>Name:</strong> <%= user.firstname %> <%= user.lastname %></p>
+              <p><%= comment.content %></p>
+
+              <% if current_user.id == @item.user_id || current_user.role == "admin" %>
+                <%= button_to "Delete", item_comment_path(@item, comment.id), method: :delete, remote: true, class: "btn btn-danger btn-sm" %>
+              <% end %>
+
+              <% if current_user.id == @item.user_id || current_user.role == "admin" %>
+                
+                  <%= button_to "Flag", flag_comment_path(comment.id),method: :get, remote: true, class: "btn btn-warning btn-sm" %>
+              <% end %>
+            </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
       <p>No comments yet...</p>
-  <% end %>
-  
-        
-  
-<h4>All Bids</h4>
-<% if current_user.role == "bidder" %>
-  <%= link_to "Place your Bid", new_item_bid_path(@item) %>
-<%end %>
+    <% end %>
 
+  </div>
 
-<% if @item.bids.present? %>
-    <% @bids = @item.bids.order(amount: :desc) %>
-    <% @bids.each do |f| %>
-      <h5>Amount : <%= f.amount %> </h5>
-      Created at : <%= f.created_at %>
-      <br>
-      <% user = User.find(f.user_id) %>
-      Bidder name : <%= user.firstname %><%=user.lastname %>
-      <br>
-    <%end %>
-<% else %>
-    <p>No bid yet...</p>
-<% end %>
-
-         
-
+  <div class="card mt-4 p-4">
+    <% if @item.bids.present? %>
+      <h4>Bidding History</h4>
+      <% @bids = @item.bids.order(amount: :desc) %>
+      <% @bids.each do |f| %>
+        <% user = User.find(f.user_id) %>
+        <div class="border p-2 rounded mb-2">
+          <h5>Amount: <%= f.amount %></h5>
+          <p><strong>Created at:</strong> <%= f.created_at %></p>
+          <p><strong>Bidder name:</strong> <%= user.firstname %> <%= user.lastname %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p>No bids yet...</p>
+    <% end %>
+  </div>
+</div>

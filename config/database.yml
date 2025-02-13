@@ -20,9 +20,31 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 
+# development:
+#   <<: *default
+#   database: auction_platform_development
+
+sqlite: &sqlite
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
 development:
-  <<: *default
-  database: auction_platform_development
+  primary:
+    <<: *default
+    database: auction_platform_development
+
+  cache:
+    <<: *sqlite
+    database: auction_platform_development_cache.sqlite3
+    migrations_paths: db/cache_migrate
+
+  cable:
+    <<: *default
+    database: auction_platform_development_cable
+    migrations_paths: db/cable_migrate
+
+
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -96,3 +118,5 @@ production:
     <<: *primary_production
     database: auction_platform_production_cable
     migrations_paths: db/cable_migrate
+
+    

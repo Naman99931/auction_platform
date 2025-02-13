@@ -1,0 +1,18 @@
+<h5><%= @user.firstname %> <%= @user.lastname %> </h5>
+Email : <%= @user.email %>
+<br>
+Phone no. : <%= @user.phone_no %>
+<br>
+Address : <%= @user.address %>
+<br>
+<% if current_user_role == "admin" %>
+  Pan no. : <%= @user.pan_no %>
+  <br>
+  <% if @user.gst_no.present? %>
+    GST no. : <%= @user.gst_no %>
+  <% end %>
+<% end %>
+
+<% if current_user.id != @user.id %>
+   <%= button_to "Report this user", report_user_path(@user.id), method: :get, class: "btn btn-warning" %>
+<% end %>

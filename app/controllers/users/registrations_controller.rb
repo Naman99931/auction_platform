@@ -58,12 +58,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
-    if resource.role == "seller"
-      SellerRegisterNotifyJob.perform_now(resource)
-      items_path
-    else
-      root_path 
-    end  
+    # if resource.role == "seller"
+    #   SellerRegisterNotifyJob.perform_now(resource)
+    #   items_path
+    # else
+    #   root_path 
+    # end  
+    items_path
   end
 
   # The path used after sign up for inactive accounts.

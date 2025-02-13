@@ -19,12 +19,11 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-  
+    
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= action_cable_meta_tag %>
+    <%= javascript_importmap_tags %>
     
-
-    <%= action_cable_meta_tag %> <!-- Important for ActionCable -->
 
   </head>
 

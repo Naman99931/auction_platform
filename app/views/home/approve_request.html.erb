@@ -1,0 +1,42 @@
+<h3>Complete Your Profile</h3>
+
+<%= form_for current_user, url: add_details_path, method: :patch do |f| %>
+  <section class="min-vh-100 d-flex justify-content-center align-items-center"
+    style="background: url('https://dinarys.com/storage/images/blogs/1BSuiff2cs0YpcWmC1UTDjjGe6MVDOxN4xwflAUV.jpeg') center/cover no-repeat;">
+
+    <div class="container d-flex justify-content-center align-items-center p-3">
+      <div class="card shadow-lg p-4" style="border-radius: 15px; max-width: 500px; width: 100%;">
+        <div class="card-body">
+          <h2 class="text-uppercase text-center mb-4">Add Details</h2>
+
+          <div class="form-outline mb-2">
+            <%= f.label :phone_no, "Mobile No." %>
+            <%= f.telephone_field :phone_no, class: "form-control" %>
+          </div>
+
+          <div class="form-outline mb-2">
+            <%= f.label :pan_no, "PAN No." %>
+            <%= f.text_field :pan_no, class: "form-control" %>
+          </div>
+
+          <% if current_user.role == "seller" %>
+          <div class="form-outline mb-2">
+            <%= f.label :gst_no, "GST No." %>
+            <%= f.text_field :gst_no, class: "form-control" %>
+          </div>
+          <% end %>
+
+          <div class="form-outline mb-2">
+            <%= f.label :address, "Your Address" %>
+            <%= f.text_field :address, class: "form-control" %>
+          </div>
+
+          <div class="actions text-center">
+            <%= f.submit "Save", class: "btn btn-success btn-lg btn-block" %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>

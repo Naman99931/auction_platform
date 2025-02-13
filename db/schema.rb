@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_31_093225) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_12_121640) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,6 +61,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_31_093225) do
     t.boolean "pinned", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "flagged", default: false
     t.index ["item_id"], name: "index_comments_on_item_id"
     t.index ["reply_id"], name: "index_comments_on_reply_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -77,6 +78,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_31_093225) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "winner_id"
+    t.string "payment_status", default: "pending"
+    t.boolean "approved", default: false
+    t.boolean "flagged", default: false
     t.index ["user_id"], name: "index_items_on_user_id"
   end
 
@@ -86,6 +90,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_31_093225) do
     t.boolean "read", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "item_id"
+    t.string "user_role"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -109,6 +115,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_31_093225) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.boolean "flagged", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

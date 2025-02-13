@@ -1,35 +1,35 @@
-import consumer from "./consumer"
+// import consumer from "./consumer";
 
-const commentsChannel = consumer.subscriptions.create("CommentsChannel", {
+// document.addEventListener("turbo:load", () => {
+//   const commentsContainer = document.getElementById("comments-list");
+//   const itemId = document.getElementById("comments")?.dataset.itemId;
+
+//   if (itemId) {
+//     consumer.subscriptions.create(
+//       { channel: "CommentsChannel", item_id: itemId },
+//       {
+//         received(data) {
+//           commentsContainer.insertAdjacentHTML("beforeend", data);
+//         }
+//       }
+//     );
+//   }
+// });
+
+
+import consumer from "channels/consumer"
+
+consumer.subscriptions.create("CommentsChannel", {
   connected() {
-    console.log("Connected to CommentsChannel");
+    // Called when the subscription is ready for use on the server
+    console.log("Channel connected")
+  },
+
+  disconnected() {
+    // Called when the subscription has been terminated by the server
   },
 
   received(data) {
-    const commentsDiv = document.getElementById("comments");
-    commentsDiv.innerHTML += `<p><strong>${data.user}:</strong> ${data.content}</p>`;
-  }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("comment-form");
-  
-  if (form) {
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      
-      const commentInput = document.getElementById("comment-input");
-      
-      fetch(`/items/${form.dataset.itemId}/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
-        },
-        body: JSON.stringify({ comment: { content: commentInput.value } })
-      });
-
-      commentInput.value = "";
-    });
+    // Called when there's incoming data on the websocket for this channel
   }
 });

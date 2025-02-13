@@ -3,6 +3,8 @@ class Item < ApplicationRecord
   validates :reserved_price, numericality: {greater_than: 0}
   validate :check_start_time, :check_end_time
 
+  after_create :approve_item_request
+
   belongs_to :user
   has_one_attached :images do |attachable|
     attachable.variant :thumb, resize_to_limit: [200, 200]
@@ -21,5 +23,9 @@ class Item < ApplicationRecord
     if end_time < start_time
       errors.add(:end_time, "cant be less than start time")
     end
+  end
+
+  def approve_item_request
+    ApproveItemJob.perform_now(self)
   end
 end

@@ -44,5 +44,8 @@ module AuctionPlatform
 
     config.assets.debug = false
 
+    config.action_dispatch.rescue_responses.merge!('CanCan::AccessDenied' => :unauthorized)
+    
+
   end
 end

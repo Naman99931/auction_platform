@@ -2,13 +2,7 @@ class ItemsController < ApplicationController
   #before_action :item_params, only: [:create]
   before_action :authenticate_user!
   def index
-    if current_user.role == "seller"
-      @items = current_user.items.includes(images_attachment: :blob)
-    
-
-    else
-      @items = Item.all.includes(images_attachment: :blob)
-    end
+    @items = Item.where("approved = ? AND flagged = ?", true, false).includes(images_attachment: :blob)
   end
 
   def show
@@ -17,14 +11,15 @@ class ItemsController < ApplicationController
 
   def new
     @item = Item.new
+    authorize! :create, @item 
   end
 
   def create
-    #@item = Item.new(item_params, :current_user)
     @item = current_user.items.new(item_params)
     @item.current_price = @item.reserved_price
     respond_to do |format|
       if @item.save
+        
         AuctionWinnerJob.set(wait_until: @item.end_time).perform_later(@item)
         format.html { redirect_to items_url, notice: "Item was created successfully." }
       else
@@ -36,6 +31,7 @@ class ItemsController < ApplicationController
 
   def edit
     @item = Item.find(params[:id])
+    authorize! :update, @item
   end
 
   def update
@@ -51,38 +47,75 @@ class ItemsController < ApplicationController
 
   def destroy
     @item = Item.find(params[:id])
-      if @item.destroy
-        flash[:notice] = "Item deleted successfully."
+    if can? :destroy, @item
+      if current_user_role == "admin" || current_user.id == @item.user_id
+          if @item.destroy
+            flash[:notice] = "Item deleted successfully."
+            redirect_to items_path
+          else
+            flash[:alert] = "Failed to delete item."
+          end
       else
-        flash[:alert] = "Failed to delete item."
+        flash[:alert] = "Failed to delete item, you are not the owner of this item."
       end
-    if current_user.role == "seller"
-      redirect_back fallback_location: items_path
-    elsif current_user.role == "admin"
-      redirect_back fallback_location: admin_all_sellers_path
+    else
+      head :forbidden
     end
   end
   
-
   def set_alert
     @item = Item.find(params[:id])
-
-    SendAlertJob.set(wait_until: @item.end_time - 1.hour).perform_later(current_user)
+    if can? :send_alert, @item
+      SendAlertJob.set(wait_until: @item.end_time - 1.hour).perform_later(current_user)
     
-    respond_to do |format|
-      format.html { redirect_back fallback_location: items_url, notice: "Will send an alert email 1 hour before ending the auction" }
+      respond_to do |format|
+        format.html { redirect_back fallback_location: items_url, notice: "Will send an alert email 1 hour before ending the auction" }
+      end
+    else
+      head :forbidden
     end
   end
 
   def end_auction
     @item = Item.find(params[:id])
-    @item.update_column(:end_time, Time.current)
-    if @item.save
-      AuctionWinnerJob.perform_later(@item)
-      respond_to do |format|
-        format.html { redirect_back fallback_location: items_url, notice: "Forcefully ended the auction" }
+    if can? :end_auction, @item
+      @item.update_column(:end_time, Time.current)
+      if @item.save
+        AuctionWinnerJob.perform_later(@item)
+        respond_to do |format|
+          format.html { redirect_back fallback_location: items_url, notice: "Forcefully ended the auction" }
+        end
       end
-     end
+    else
+      head :forbidden
+    end
+  end
+
+  def user_items
+    if current_user_role == "admin"
+      @user = User.find(params[:id])
+      if @user.role == "seller"
+        @items = @user.items.includes(images_attachment: :blob)
+      else
+        @items = Item.where(winner_id:@user.id)
+      end
+    else
+      @items = current_user.items.includes(images_attachment: :blob)
+    end
+  end
+
+  def buy_items
+    @items = Item.where(winner_id: current_user.id)
+  end
+
+  def report_item
+    item = Item.find(params[:id])
+    seller = User.find(item.user_id)
+    current_user.notifications.create(note:"The item named #{item.title} is reported by the user named #{current_user.firstname}", item_id:item.id, user_role:"admin")
+    seller.notifications.create(note:"Your item named #{item.title} is reported. Kindly review this item, otherwise it will get flagged", item_id:item.id, user_role:"seller")
+    respond_to do |format|
+      format.html { redirect_back fallback_location: items_url, notice: "Will take an action, thanks for your feedback." }
+    end
   end
 
   private

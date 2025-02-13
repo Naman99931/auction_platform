@@ -4,6 +4,6 @@ class WinnerNotifyJob < ApplicationJob
   def perform(winner, item)
     name = winner.firstname
     title = item.title
-    winner.notifications.create(content:"Auction for the #{title} is ended and the winner is #{name}.")
+    winner.notifications.create(note:"Auction for the #{title} is ended and the winner is #{name}.")
   end
 end

@@ -1,15 +1,7 @@
-<% if current_user.role == "seller" %>
-  <% if current_user.approved == true %>
-      <br>
-      <%= link_to "Add new Item", new_item_path %>
-      <br>
-  <% else %>
-      <p>Your account is yet to be approved.</p>
-  <% end %>
+<% if current_user_role == nil %>
+<h5><%=link_to 'Wants to participate in any auction, be a Bidder', approve_request_path(role: "bidder")%></h5>
+<h5><%=link_to "Wants to sell your product, be a Seller", approve_request_path(role: "seller")%></h5>
 <% end %>
-
-
-
 <%=  render partial: "ongoing_auction", locals: { items: @items} %>
 
 <%= render partial: "upcoming_auction", locals: { items: @items} %>
