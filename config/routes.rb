@@ -15,8 +15,21 @@ Rails.application.routes.draw do
   get 'report_user/:id', to: 'home#report_user', as: 'report_user'
 
   get 'flag_user/:id/:user_id', to: 'home#flag_user', as: 'flag_user'
-  
 
+  get 'all_flagged_comments', to: 'comments#all_flagged_comments'
+
+  get 'all_flagged_items', to: 'items#all_flagged_items'
+
+  get 'all_flagged_users', to: 'home#all_flagged_users'
+
+  get 'remove_flag_item/:id', to: 'items#remove_flag_item', as: 'remove_flag_item'
+
+  get 'remove_flag_user/:id', to: 'home#remove_flag_user', as: 'remove_flag_user'
+
+  get 'remove_flag_comment/:id', to: 'comments#remove_flag_comment', as: 'remove_flag_comment'
+
+  get 'flagged_item_contact_admin/:item_id', to: 'home#flagged_item_contact_admin', as: 'flagged_item_contact_admin'
+  
   #action cable :
   mount ActionCable.server => '/cable'
 

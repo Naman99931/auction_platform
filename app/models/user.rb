@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   validates :firstname, :lastname, presence: true  # :phone_no, :pan_no, :address,
   validates :email, uniqueness: true
+  # validate :check_user
   # validates :phone_no, uniqueness: true
   # validates :pan_no, uniqueness: true
   # validates :gst_no, uniqueness: true
@@ -19,6 +20,24 @@ class User < ApplicationRecord
   has_many :bids, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :notifications, dependent: :destroy
+
+  # def check_user
+  #   if self&.role == "bidder"
+  #     if self.pan_no.present? && self.phone_no.present? && self.address.present?
+  #     else
+  #       self.update_column(:role, nil)
+  #       errors.add("please enter full details")
+  #     end
+  #   elsif self&.role == "seller"
+  #     if self.pan_no.present? && self.phone_no.present? && self.address.present? && self.gst_no.present?
+  #     else
+  #       self.update_column(:role, nil)
+  #       errors.add("please enter full details")
+  #     end
+  #   end
+  # end
+
+
 
   def user_notify
     if(self.role=="admin")

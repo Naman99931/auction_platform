@@ -34,8 +34,8 @@ class PaymentsController < ApplicationController
 
     @item = Item.find_by(id: item_id)
 
-    if @item
-      @item.update_column(payment_status: "done") 
+    if @item.present?
+      @item.update(payment_status: "done") 
       @user = User.find_by(id: @item.winner_id) 
       UserMailer.payment_success(current_user).deliver_later
     end

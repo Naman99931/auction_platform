@@ -1,0 +1,15 @@
+<h3>All Flagged Items</h3>
+<% if @items.present? %>
+  <% @items.each do |item| %>
+    <h5>Title : <%=item.title%> </h5>
+    <% if item.images.attached? %>
+          <%= image_tag item.images.variant(:thumb), class: "img-fluid rounded" %>
+    <% end %>
+    <h6>Seller Name : <%=item.user.firstname%> <%=item.user.lastname%></h6>
+    <%= button_to "Unflag this item", remove_flag_item_path(item.id), method: :get, class: "btn btn-primary" %>
+
+    <br>
+  <% end %>
+<% else %>
+    <p>No flagged items yet...</p>
+<% end %>

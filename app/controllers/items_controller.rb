@@ -118,6 +118,20 @@ class ItemsController < ApplicationController
     end
   end
 
+  def all_flagged_items
+    @items = Item.where("approved = ? AND flagged = ?", true, true)
+  end
+
+  def remove_flag_item
+    @item = Item.find(params[:id])
+    @item.update_column(:flagged, false)
+    seller = User.find(@item.user_id)
+    seller.notifications.create(note:"Flag from your item  #{@item.title}, has been removed successfully.", item_id:@item.id)
+    respond_to do |format|
+      format.html { redirect_back fallback_location: all_flagged_items_path, notice:"Flag from the item removed successfully."}
+    end
+  end
+
   private
   def item_params
     params.expect(item: [:title, :user_id, :item_description, :reserved_price, :start_time, :end_time, :images])

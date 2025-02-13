@@ -80,6 +80,20 @@ class CommentsController < ApplicationController
     end
     redirect_back fallback_location: item_bids_path(@comment.item_id)
   end
+
+  def all_flagged_comments
+    @comments = Comment.where(flagged:true)
+  end
+
+  def remove_flag_comment
+    comment = Comment.find(params[:id])
+    comment.update_column(:flagged, false)
+    user = comment.user
+    user.notifications.create(note:"Your comment is removed from the flaged comments", item_id:comment.item_id)
+    respond_to do |format|
+      format.html { redirect_back fallback_location: all_flagged_comments_path, notice:"Flag removed successfully from the comment."}
+    end
+  end
   # def comment_reply
   #   # @reply = @item.comments.new
   #   # @reply.reply_id = @comment.id

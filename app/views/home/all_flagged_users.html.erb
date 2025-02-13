@@ -1,0 +1,13 @@
+<h3> All Flagged Users </h3>
+<% if @users.present? %>
+  <% @users.each do |user| %>
+    <h6>User Name : <%=user.firstname%> <%=user.lastname%></h6>
+    <p>Email Id : <%=user.email%></p>
+    <p>Phone No. : <%=user.phone_no%></p>
+    <p>Address : <%=user.address%></p>
+    <%= button_to "Remove Flag", remove_flag_user_path(user.id), method: :get, class: "btn btn-primary" %>
+    <br>
+  <% end %>
+<% else %>
+    <p>No flagged users yet...</p>
+<% end %>

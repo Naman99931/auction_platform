@@ -11,6 +11,19 @@
         <% if user_signed_in? %>
 
         <% if current_user_role == "admin" %>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="<%= all_flagged_users_path %>">Flagged Users</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="<%= all_flagged_items_path %>">Flagged Items</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="<%= all_flagged_comments_path %>">Flagged Comments</a>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="<%= home_all_sellers_path %>">All Sellers</a>
           </li>

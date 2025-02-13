@@ -1,0 +1,12 @@
+<h2><strong>All Flagged Comments</strong></h2>
+<% if @comments.present? %>
+  <% @comments.each do |comment| %>
+  <p>User Name : <%=comment.user.firstname%> <%=comment.user.lastname%></p>
+  <p>Comment : <%=comment.content%>
+  <%= button_to "Remove Flag", remove_flag_comment_path(comment.id), method: :get, class: "btn btn-primary" %>
+
+  <br>
+  <% end %>
+<% else %>
+  <p>No flagged comments yet...</p>
+<% end %>

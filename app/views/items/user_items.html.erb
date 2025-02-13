@@ -4,7 +4,11 @@
       <%= button_to "Add new Item", new_item_path, method: :get, class: "btn btn-primary" %>
       <br>
   <% else %>
+    <% if current_user.approved == false %>
       <p>Your account is yet to be approved.</p>
+    <% elsif current_user.flagged == true %>
+      <p><strong>You can not add new item, because your account got flagged.Please reach to our platform via : costumercare@auctionplatform.in .</strong></p>
+    <% end %>
   <% end %>
 <% end %>
 

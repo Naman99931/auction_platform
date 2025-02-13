@@ -29,7 +29,7 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_check_abilities.md
 
-    can :create, Item if user.seller?
+    can :create, Item if user.seller? && user.approved == true && user.flagged == false
     can :update, Item if user.seller?
     can :send_alert, Item if user.bidder?
     can :end_auction, Item if user.admin?

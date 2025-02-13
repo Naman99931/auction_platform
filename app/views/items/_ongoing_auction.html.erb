@@ -37,8 +37,12 @@
             <br>
                     <%= button_to "View Details", item_path(form.id), method: :get, class: "btn btn-info" %>
             <br>
-            <%= button_to "View this Auction", item_bids_path(form.id), method: :get, class: "btn btn-secondary" %>
-
+            <% if form.flagged == false %> 
+              <%= button_to "View this Auction", item_bids_path(form.id), method: :get, class: "btn btn-secondary" %>
+            <% else %>
+              <h6 class: "danger">Your Item is flagged right now, send an enquiry to get it unflagged</h6>
+              <%= button_to "Contact", flagged_item_contact_admin_path(form.id), method: :get, class: "btn btn-primary" %>
+            <% end %>
             <br>
             <% if current_user.role == "bidder" && current_user.approved%>
                 <% if (form.end_time - Time.current).to_i > 3600 %>

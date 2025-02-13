@@ -1,6 +1,6 @@
 <h3>Complete Your Profile</h3>
 
-<%= form_for current_user, url: add_details_path, method: :patch do |f| %>
+<%= form_for current_user, url: add_details_path, method: :patch, data: { turbo: false } do |f| %>
   <section class="min-vh-100 d-flex justify-content-center align-items-center"
     style="background: url('https://dinarys.com/storage/images/blogs/1BSuiff2cs0YpcWmC1UTDjjGe6MVDOxN4xwflAUV.jpeg') center/cover no-repeat;">
 
